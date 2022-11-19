@@ -171,7 +171,7 @@ public class CipherTextOnlyAttack {
 
     public static void write_to_txt_file(Map<Character, Character> final_key) {
         // new file object
-        File file = new File("filename.txt");
+        File file = new File("CipherText_Key.txt");
         BufferedWriter bf = null;
         try {
             // create new BufferedWriter for the output file
@@ -211,7 +211,7 @@ public class CipherTextOnlyAttack {
         used_keys.put(map_values.toString(), map_values.toString());
         Map<Character, Character> best_key = new HashMap<Character, Character>(map_key);
         long start = System.nanoTime();
-        while (count < factorialUsingForLoop(map_key.size()) && (System.nanoTime() - start) / 1000000000 <= 10) {
+        while (count < factorialUsingForLoop(map_key.size()) && (System.nanoTime() - start) / 1000000000 <= 300) {
             String decrypted_text = decrypt(read_file_txt("CipherText_Example.txt"), read_file_txt("IV_Example.txt"), map_key);
             double percentage = compare_with_dictionary(decrypted_text.toLowerCase(), words);
             if (percentage > max_percentage) {
