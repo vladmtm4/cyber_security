@@ -32,7 +32,7 @@ public class CipherBlockChaining {
                int how_much_char_to_add = 10 - plain_text.length();
                 for (int j = 0; j < how_much_char_to_add; j++)
                 {
-                    plain_text += "0";
+                    plain_text += "\0";
                 }
                 plain_text = break_the_text(plain_text,plain_text_blocks);
 
@@ -143,6 +143,7 @@ public class CipherBlockChaining {
         String key_read = read_file("Key_Example.txt");
         String plain_text_good = read_file("PlainText_Example.txt");
         String cipher_good = read_file("CipherText_Example.txt");
+        String key = read_file("Key_Example.txt");
         System.out.println("this is the amount of ciphered text " + cipher_good.length());
         System.out.println("this is the amount of plain text " + plain_text_good.length());
         String our_cipher = encrypt(read_file("PlainText_Example.txt"),read_file("IV_Example.txt"),"dhagcfbe");
@@ -152,6 +153,7 @@ public class CipherBlockChaining {
         /*
         change the read file when gil answer
         remove last charaters when decrypting
+        add read key function to make it generic (use vectors)
          */
 
     }
