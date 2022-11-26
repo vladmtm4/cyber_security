@@ -3,6 +3,8 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.*;
 
@@ -56,22 +58,54 @@ public class DiffieHellman {
             System.out.println("You made i MF");
         }
 
-        BigInteger [] diffie_hellman_arr  ={private_Xa,ya,private_Xb,yb,ka,kb};
+        BigInteger [] diffie_hellman_arr  ={primitive_root,private_Xa,ya,private_Xb,yb,ka,kb};
 
         return diffie_hellman_arr;
    }
 
-    /*public static byte[] get_digest(String sender_info, BigInteger sender_public_key, String CA_info)
+    public static byte[] get_digest(String sender_info, BigInteger sender_public_key, String CA_info)
     {
-     need to digest this 
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        String  input=sender_info+new String(sender_public_key.toByteArray())+CA_info;// this string is the certificate
+        return md.digest(input.getBytes());
+
     }
-*/
+
+    public static byte[] sign_certificate(byte[] hash, BigInteger private_key, BigInteger n)
+    {
+        return RSA.encrypt(new String(hash), private_key, n);//encrypt the certificate usin RSA
+    }
+
+    public static byte[] get_hash_from_certificate(byte[] signed_certificate,BigInteger public_key,BigInteger n)
+    {
+        return RSA.decrypt(signed_certificate,public_key,n).getBytes();
+    }
+
     public static void main(String[] args)
     {
         BigInteger q = BigInteger.valueOf(353);
         BigInteger Xa = BigInteger.valueOf(97);
         BigInteger Xb = BigInteger.valueOf(233);
-        diffie_hellman(q,Xa,Xb);
+        BigInteger [] diffie_hellman_arr  = diffie_hellman(q,Xa,Xb);
+        byte[] digest = get_digest("Group 6" ,diffie_hellman_arr[2],"CyberSecurity2022");
+        BigInteger [] RSA_components = RSA.get_n_e_d_phiN_of_RSA(digest.toString());
+        byte[] singed_cert = sign_certificate(digest,RSA_components[2],RSA_components[0]);
+        byte[] hash_cert_decrypted = get_hash_from_certificate(singed_cert,RSA_components[1],RSA_components[0]);
+        System.out.println(hash_cert_decrypted.toString());
+        System.out.println("boom boom");
+        System.out.println(digest.toString());
     }
+
+
+
+
+
+
+
 
 }

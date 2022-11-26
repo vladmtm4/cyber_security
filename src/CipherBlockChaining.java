@@ -124,7 +124,6 @@ public class CipherBlockChaining {
         Vector <String> cipher_text_blocks = new Vector<String>();
         break_plain_text_vector(encrypted_text,cipher_text_blocks);
         Map map_key=inverse_build_map(key);
-        String plain_text_good = read_file("PlainText_Example.txt");
         for (int i = 0; i < cipher_text_blocks.size(); i++ )
         {
             String cipher_block = cipher_text_blocks.elementAt(i);
@@ -140,15 +139,16 @@ public class CipherBlockChaining {
 
     public static void main(String[] args)
     {
-        String key_read = read_file("Key_Example.txt");
         String plain_text_good = read_file("PlainText_Example.txt");
         String cipher_good = read_file("CipherText_Example.txt");
+        plain_text_good = plain_text_good.replaceAll("\r","");
         String key = read_file("Key_Example.txt");
-        System.out.println("this is the amount of ciphered text " + cipher_good.length());
-        System.out.println("this is the amount of plain text " + plain_text_good.length());
-        String our_cipher = encrypt(read_file("PlainText_Example.txt"),read_file("IV_Example.txt"),"dhagcfbe");
-        String our_plain_text = decrypt(read_file("CipherText_Example.txt"),read_file("IV_Example.txt"),"dhagcfbe");
+        String our_cipher = encrypt(plain_text_good,read_file("IV_Example.txt"),"dhagcfbe");
+        String our_plain_text = decrypt(cipher_good,read_file("IV_Example.txt"),"dhagcfbe");
         System.out.println( " well ? ");
+        System.out.println(our_cipher.compareTo(cipher_good));
+        System.out.println(our_plain_text.compareTo(plain_text_good));
+
 
         /*
         change the read file when gil answer

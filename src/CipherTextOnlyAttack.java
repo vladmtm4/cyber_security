@@ -135,12 +135,17 @@ public class CipherTextOnlyAttack {
 
     public static double compare_with_dictionary(String final_plain_text, Map<String, String> words) {
         double matches = 0;
+        double missed = 0;
         String[] split_text = final_plain_text.split("[ -.,():\n]");
         for (int i = 0; i < split_text.length; i++) {
             if (words.get(split_text[i]) != null) {
                 matches++;
             }
-
+            else
+                missed++;
+            if(i>100 && missed/i>0.2) {
+                break;
+            }
         }
         return matches / split_text.length;
     }
@@ -198,9 +203,10 @@ public class CipherTextOnlyAttack {
     }
     public static void main(String[] args) {
         //run_generate_key();
+        String cipher_text_example = read_file_txt("CipherText_Example.txt");
+        String iv_example = read_file_txt("IV_Example.txt");
         Map<String, String> words = new HashMap<String, String>();
         read_file_scan_to_map("Data_Set.txt", words);
-        //System.out.println(words.elementAt(84098));
         Vector<String> read_key = new Vector<String>();
         read_file_scan_to_array("KeyGenerator/myKey.txt", read_key);
         double max_percentage = 0;
@@ -211,8 +217,9 @@ public class CipherTextOnlyAttack {
         used_keys.put(map_values.toString(), map_values.toString());
         Map<Character, Character> best_key = new HashMap<Character, Character>(map_key);
         long start = System.nanoTime();
+        String decrypted_text = "";
         while (count < factorialUsingForLoop(map_key.size()) && (System.nanoTime() - start) / 1000000000 <= 300) {
-            String decrypted_text = decrypt(read_file_txt("CipherText_Example.txt"), read_file_txt("IV_Example.txt"), map_key);
+            decrypted_text = decrypt(cipher_text_example,iv_example , map_key);
             double percentage = compare_with_dictionary(decrypted_text.toLowerCase(), words);
             if (percentage > max_percentage) {
                 max_percentage = percentage;
@@ -223,6 +230,7 @@ public class CipherTextOnlyAttack {
             map_values = new ArrayList(map_key.values());
             used_keys.put(map_values.toString(), map_values.toString());
             count++;
+            System.out.println(count);
 
         }
         System.out.println(max_percentage);

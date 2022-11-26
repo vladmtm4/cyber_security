@@ -59,6 +59,29 @@ public class RSA
 
     }
 
+    public static BigInteger[] get_n_e_d_phiN_of_RSA (String plain_text)
+    {
+        byte [] byted_plain_message = plain_text.getBytes();
+        Random rnd = new Random();
+        int message_bit_length = byted_plain_message.length*8;
+        BigInteger one = BigInteger.valueOf(1);
+        HashMap<BigInteger,BigInteger> p_q= new  HashMap<BigInteger,BigInteger>();
+        p_q= generate_p_q_different_primes(plain_text);
+        List <BigInteger> p = new ArrayList(p_q.keySet());
+        List <BigInteger> q = new ArrayList(p_q.values());
+        BigInteger phi_n = (p.get(0).subtract(one)).multiply(q.get(0).subtract(one));
+        BigInteger n = q.get(0).multiply(p.get(0));
+        BigInteger e = BigInteger.probablePrime((message_bit_length/2)+1, rnd);
+        while (phi_n.gcd(e).compareTo(one) > 0 && e.compareTo(phi_n) < 0)
+        {//Greatest common divisor with phi=1 and e<phi
+            e.add(one);
+        }
+        BigInteger d = e.modInverse(phi_n);//d*e mod phi=1
+        BigInteger[] RSA_components = {n,e,d,phi_n};
+        return RSA_components;
+
+    }
+
     public static void main(String[] args)
     {
         BigInteger one = BigInteger.valueOf(1);
