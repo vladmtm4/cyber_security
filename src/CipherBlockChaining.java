@@ -1,9 +1,5 @@
 import java.util.Vector;
 import java.util.*;
-import java.io.File;  // Import the File class
-import java.io.FileNotFoundException;  // Import this class to handle errors
-import java.util.Scanner; // Import the Scanner class to read text files
-import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
@@ -56,10 +52,9 @@ public class CipherBlockChaining {
     public static String cipher_text_generator(String plain_text,Map<Character,Character>map_key)
     {
         String cipher_text = "";
-        String source = "abcdefgh";
         for (int i = 0; i < plain_text.length(); i++)
         {
-            if (source.indexOf(plain_text.charAt(i))!=-1)
+            if (map_key.get(plain_text.charAt(i)) != null)
                 cipher_text+=map_key.get(plain_text.charAt(i));
             else
                 cipher_text+=plain_text.charAt(i);
@@ -70,22 +65,20 @@ public class CipherBlockChaining {
     public static Map<Character,Character> build_map(String key)
     {
         Map<Character,Character> map_key = new HashMap<Character,Character>();
-        String source = "abcdefgh";
-        for (int i = 0; i <key.length() ; i++)
-        {
-            map_key.put(source.charAt(i),key.charAt(i));
+        String[] split_text = key.split("[\n]");
+        for (int i = 0; i < split_text.length; i++) {
+            map_key.put(split_text[i].charAt(0), split_text[i].charAt(2));
         }
         return map_key;
     }
         public static Map<Character,Character> inverse_build_map(String key)
         {
-            Map<Character,Character> inverse_map_key = new HashMap<Character,Character>();
-            String source = "abcdefgh";
-            for (int i = 0; i <key.length() ; i++)
-            {
-                inverse_map_key.put(key.charAt(i),source.charAt(i));
+            Map<Character,Character> map_key = new HashMap<Character,Character>();
+            String[] split_text = key.split("[\n]");
+            for (int i = 0; i < split_text.length; i++) {
+                map_key.put(split_text[i].charAt(2), split_text[i].charAt(0));
             }
-            return inverse_map_key;
+            return map_key;
         }
 
     public static String read_file(String file_name) {
@@ -104,9 +97,9 @@ public class CipherBlockChaining {
     {
         String final_cipher = "";
         Vector<String> plain_text_blocks = new Vector<String>();
+        plain_text = plain_text.replaceAll("\r","");
         break_plain_text_vector(plain_text,plain_text_blocks);
         Map map_key=build_map(key);
-        String cipher_good = read_file("CipherText_Example.txt");
         for (int i = 0; i < plain_text_blocks.size(); i++ )
         {
             plain_text_blocks.set(i,xoring_function(plain_text_blocks.elementAt(i),init_vector));
@@ -136,25 +129,4 @@ public class CipherBlockChaining {
      return final_plain_text;
     }
 
-
-    public static void main(String[] args)
-    {
-        String plain_text_good = read_file("PlainText_Example.txt");
-        String cipher_good = read_file("CipherText_Example.txt");
-        plain_text_good = plain_text_good.replaceAll("\r","");
-        String key = read_file("Key_Example.txt");
-        String our_cipher = encrypt(plain_text_good,read_file("IV_Example.txt"),"dhagcfbe");
-        String our_plain_text = decrypt(cipher_good,read_file("IV_Example.txt"),"dhagcfbe");
-        System.out.println( " well ? ");
-        System.out.println(our_cipher.compareTo(cipher_good));
-        System.out.println(our_plain_text.compareTo(plain_text_good));
-
-
-        /*
-        change the read file when gil answer
-        remove last charaters when decrypting
-        add read key function to make it generic (use vectors)
-         */
-
-    }
 }

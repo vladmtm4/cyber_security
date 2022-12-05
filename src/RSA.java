@@ -1,28 +1,10 @@
-
-import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.PublicKey;
 import java.util.*;
 
 
 public class RSA
 {
-
-    public static String read_file(String file_name) {
-        String data = "";
-        try {
-            data =  new String(Files.readAllBytes(Paths.get(file_name)));
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        return data;
-    }
 
     public static HashMap<BigInteger,BigInteger> generate_p_q_different_primes(String plain_message)
     {
@@ -59,7 +41,9 @@ public class RSA
 
     }
 
-    public static BigInteger[] get_n_e_d_phiN_of_RSA (String plain_text)
+ /*   a function we used to generate the whole RSA algorithm for testing
+
+ public static BigInteger[] get_n_e_d_phiN_of_RSA (String plain_text)
     {
         byte [] byted_plain_message = plain_text.getBytes();
         Random rnd = new Random();
@@ -81,32 +65,5 @@ public class RSA
         return RSA_components;
 
     }
-
-    public static void main(String[] args)
-    {
-        BigInteger one = BigInteger.valueOf(1);
-        HashMap<BigInteger,BigInteger> p_q= new  HashMap<BigInteger,BigInteger>();
-        p_q= generate_p_q_different_primes("M");
-        List <BigInteger> p = new ArrayList(p_q.keySet());
-        List <BigInteger> q = new ArrayList(p_q.values());
-        BigInteger phi_n = (p.get(0).subtract(one)).multiply(q.get(0).subtract(one));
-        BigInteger n = q.get(0).multiply(p.get(0));
-        // finding and printing factors b/w 1 to num
-        Vector <Integer> factorials_nums  = new Vector<Integer>();
-        for(int i = 1; i <= phi_n.intValue(); i++)
-        {
-            if(phi_n.intValue() % i == 0)
-            {
-                factorials_nums.add(i);
-            }
-
-        }
-        BigInteger e = BigInteger.valueOf(factorials_nums.elementAt(6)); /// not working 
-        BigInteger d = e.modInverse(phi_n); /// not working
-        d = one.divide(e).mod(phi_n);
-        byte [] encripted_message = encrypt("N" ,   BigInteger.valueOf(7),  BigInteger.valueOf(187));
-        String decripted_message = decrypt(encripted_message ,   BigInteger.valueOf(23),  BigInteger.valueOf(187) );
-
-    }
-
+  */
 }

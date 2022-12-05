@@ -4,5 +4,5 @@ c a
 d g
 e c
 f f
-g b
-h e
+g e
+h b

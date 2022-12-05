@@ -4,7 +4,6 @@ import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
 import java.util.*;
-import java.math.*;
 import java.io.FileWriter;   // Import the FileWriter class
 import java.io.IOException;  // Import the IOException class to handle errors
 import java.io.*;
@@ -33,22 +32,6 @@ public class CipherTextOnlyAttack {
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 data_set.add(myReader.nextLine());
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    public static void read_file_scan_to_map(String file_name, Map<String, String> data_set) {
-
-        try {
-            File myObj = new File(file_name);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String next_line = myReader.nextLine();
-                data_set.put(next_line, next_line);
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -105,14 +88,15 @@ public class CipherTextOnlyAttack {
     }
 
 
-    public static String cipher_text_generator(String plain_text, Map<Character, Character> map_key) {
+    public static String cipher_text_generator(String plain_text,Map<Character,Character>map_key)
+    {
         String cipher_text = "";
-        String source = "abcdefgh";
-        for (int i = 0; i < plain_text.length(); i++) {
-            if (source.indexOf(plain_text.charAt(i)) != -1)
-                cipher_text += map_key.get(plain_text.charAt(i));
+        for (int i = 0; i < plain_text.length(); i++)
+        {
+            if (map_key.get(plain_text.charAt(i)) != null)
+                cipher_text+=map_key.get(plain_text.charAt(i));
             else
-                cipher_text += plain_text.charAt(i);
+                cipher_text+=plain_text.charAt(i);
 
         }
         return cipher_text;
@@ -150,16 +134,6 @@ public class CipherTextOnlyAttack {
         return matches / split_text.length;
     }
 
-
-    public static void run_generate_key() {
-        try {
-            Process p = Runtime.getRuntime().exec("cmd /c start D:\\Cyber_security\\Cyber_security_good\\KeyGenerator\\GenerateKey-Shortcut.lnk");
-
-        } catch (IOException ex) {
-            //Validate the case the file can't be accesed (not enought permissions)
-
-        }
-    }
 
     public static void shuffle_map(Map<Character, Character> map, Map<String, String> used_keys) {
         List<Character> valueList = new ArrayList<Character>(map.values());
@@ -202,14 +176,12 @@ public class CipherTextOnlyAttack {
         }
     }
     public static void main(String[] args) {
-        //run_generate_key();
         String cipher_text_example = read_file_txt("CipherText_Example.txt");
         String iv_example = read_file_txt("IV_Example.txt");
         Map<String, String> words = new HashMap<String, String>();
-        //read_file_scan_to_map("Data_Set.txt", words);
         hard_coded_words(words);
         Vector<String> read_key = new Vector<String>();
-        read_file_scan_to_array("KeyGenerator/myKey.txt", read_key);
+        read_file_scan_to_array("KeyGenerator/myKey.txt", read_key); //please put path to
         double max_percentage = 0;
         double count = 0;
         Map<String, String> used_keys = new HashMap<String, String>();
@@ -225,20 +197,12 @@ public class CipherTextOnlyAttack {
             if (percentage > max_percentage) {
                 max_percentage = percentage;
                 best_key = new HashMap<Character, Character>(map_key);
-                System.out.println("Switch ");
             }
             shuffle_map(map_key, used_keys);
             map_values = new ArrayList(map_key.values());
             used_keys.put(map_values.toString(), map_values.toString());
             count++;
-            /*  if(count%10==0) {
-                System.out.println(count);
-            }
-
-             */
-
         }
-        System.out.println(max_percentage);
         List<Character> keys = new ArrayList(best_key.keySet());
         List<Character> values = new ArrayList(best_key.values());
         Map<Character, Character> final_key = new HashMap<Character, Character>();
@@ -247,9 +211,7 @@ public class CipherTextOnlyAttack {
         }
         System.out.println("This is the Best key after change  ");
         System.out.println(final_key);
-        System.out.println("i ran " + count + " times");
         write_to_txt_file(final_key);
-
 
     }
     public static void hard_coded_words(Map<String, String> data_set)
