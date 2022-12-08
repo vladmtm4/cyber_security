@@ -71,14 +71,14 @@ public class DiffieHellman {
 
     }
 
-    public static byte[] sign_certificate(byte[] hash, BigInteger private_key, BigInteger n)
+    public static byte[] sign_certificate(byte[] hash, BigInteger public_key, BigInteger n)
     {
-        return RSA.encrypt(new String(hash), private_key, n);//encrypt the certificate usin RSA
+        return RSA.encrypt(new String(hash), public_key, n);//encrypt the certificate usin RSA
     }
 
-    public static byte[] get_hash_from_certificate(byte[] signed_certificate,BigInteger public_key,BigInteger n)
+    public static byte[] get_hash_from_certificate(byte[] signed_certificate,BigInteger private_key,BigInteger n)
     {
-        return RSA.decrypt(signed_certificate,public_key,n).getBytes();
+        return RSA.decrypt(signed_certificate,private_key,n).getBytes();
     }
     public static void main(String[] args)
     {
@@ -88,8 +88,8 @@ public class DiffieHellman {
         BigInteger [] diffie_hellman_arr  = diffie_hellman(q,Xa,Xb);
         byte[] digest = get_digest("Group 6" ,diffie_hellman_arr[2],"CyberSecurity2022");
         BigInteger [] RSA_components = RSA.get_n_e_d_phiN_of_RSA(digest.toString());
-        byte[] singed_cert = sign_certificate(digest,RSA_components[2],RSA_components[0]);
-        byte[] hash_cert_decrypted = get_hash_from_certificate(singed_cert,RSA_components[1],RSA_components[0]);
+        byte[] singed_cert = sign_certificate(digest,RSA_components[1],RSA_components[0]);
+        byte[] hash_cert_decrypted = get_hash_from_certificate(singed_cert,RSA_components[2],RSA_components[0]);
         System.out.println(hash_cert_decrypted.toString());
         System.out.println("boom boom");
         System.out.println(digest.toString());

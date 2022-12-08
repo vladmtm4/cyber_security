@@ -128,14 +128,16 @@ public class CipherBlockChaining {
 
      return final_plain_text;
     }
+
+    /*
     public static void main(String[] args)
     {
         String plain_text_good = read_file("PlainText_Example.txt");
         String cipher_good = read_file("CipherText_Example.txt");
         plain_text_good = plain_text_good.replaceAll("\r","");
         String key = read_file("Key_Example.txt");
-        String our_cipher = encrypt(plain_text_good,read_file("IV_Example.txt"),"dhagcfbe");
-        String our_plain_text = decrypt(cipher_good,read_file("IV_Example.txt"),"dhagcfbe");
+        String our_cipher = encrypt(plain_text_good,read_file("IV_Example.txt"),key);
+        String our_plain_text = decrypt(our_cipher,read_file("IV_Example.txt"),key);
         System.out.println( " well ? ");
         System.out.println(our_cipher.compareTo(cipher_good));
         System.out.println(our_plain_text.compareTo(plain_text_good));
@@ -145,4 +147,6 @@ public class CipherBlockChaining {
 
     }
 
+
+     */
 }
