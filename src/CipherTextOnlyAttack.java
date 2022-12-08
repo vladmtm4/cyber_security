@@ -51,12 +51,25 @@ public class CipherTextOnlyAttack {
         return data;
     }
 
+    /*
     public static Map<Character, Character> build_map(Vector<String> read_key) {
         Map<Character, Character> map_key = new HashMap<Character, Character>();
         for (int i = 0; i < read_key.size(); i++) {
             map_key.put(read_key.elementAt(i).charAt(2), read_key.elementAt(i).charAt(0));
         }
         return map_key;
+    }
+
+     */
+
+    public static void build_map(Map<Character, Character>init_key) {
+        init_key.put('a','a');
+        init_key.put('b','b');
+        init_key.put('c','c');
+        init_key.put('d','d');
+        init_key.put('e','e');
+        init_key.put('f','f');
+
     }
 
     public static Vector<String> break_plain_text_vector(String plain_text, Vector<String> plain_text_blocks) {
@@ -181,11 +194,11 @@ public class CipherTextOnlyAttack {
         Map<String, String> words = new HashMap<String, String>();
         hard_coded_words(words);
         Vector<String> read_key = new Vector<String>();
-        read_file_scan_to_array("KeyGenerator/myKey.txt", read_key); //please put path to
         double max_percentage = 0;
         double count = 0;
         Map<String, String> used_keys = new HashMap<String, String>();
-        Map map_key = build_map(read_key);
+        Map<Character, Character> map_key = new HashMap<Character,Character>();
+        build_map(map_key);
         List<Character> map_values = new ArrayList(map_key.values());
         used_keys.put(map_values.toString(), map_values.toString());
         Map<Character, Character> best_key = new HashMap<Character, Character>(map_key);

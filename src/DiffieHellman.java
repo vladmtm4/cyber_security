@@ -80,5 +80,19 @@ public class DiffieHellman {
     {
         return RSA.decrypt(signed_certificate,public_key,n).getBytes();
     }
+    public static void main(String[] args)
+    {
+        BigInteger q = BigInteger.valueOf(353);
+        BigInteger Xa = BigInteger.valueOf(97);
+        BigInteger Xb = BigInteger.valueOf(233);
+        BigInteger [] diffie_hellman_arr  = diffie_hellman(q,Xa,Xb);
+        byte[] digest = get_digest("Group 6" ,diffie_hellman_arr[2],"CyberSecurity2022");
+        BigInteger [] RSA_components = RSA.get_n_e_d_phiN_of_RSA(digest.toString());
+        byte[] singed_cert = sign_certificate(digest,RSA_components[2],RSA_components[0]);
+        byte[] hash_cert_decrypted = get_hash_from_certificate(singed_cert,RSA_components[1],RSA_components[0]);
+        System.out.println(hash_cert_decrypted.toString());
+        System.out.println("boom boom");
+        System.out.println(digest.toString());
+    }
 
 }
